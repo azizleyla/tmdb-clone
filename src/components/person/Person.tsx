@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { MovieApi } from '../../api/movieApi';
 import { IPerson, IRecommendation } from '../../types/types';
 import NotFound from "../../assets/img/not_found.jpeg"
+import Acting from '../Acting/Acting';
 
 
 interface IPersonObj {
@@ -96,7 +97,7 @@ console.log(knowForMovies)
                 </div>
              
                 </div>
-                <div className='text-white w-full w-[80%]'>
+                <div className='text-white w-[80%]'>
            <h2 className='font-bold text-2xl my-2'>{personData?.name}</h2>
            <div className='my-6'>
            <h3 className='my-2 font-semibold text-lg'>Biography</h3>
@@ -122,6 +123,7 @@ console.log(knowForMovies)
         </div>
       ))}
     </div>
+    <Acting creditsData={creditsData}/>
     </div>
                 </div>
             </div>

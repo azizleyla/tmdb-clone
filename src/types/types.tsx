@@ -95,6 +95,13 @@ export interface IRecommendation {
   vote_average: number;
 }
 
+export interface IActing extends IRecommendation{
+  original_name:string,
+  department:string,
+  cast:any[],
+  crew:any[],
+  
+}
 export interface IMoviePart {
   poster_path: string;
   original_title: string;
