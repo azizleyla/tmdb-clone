@@ -1,22 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { IActing, IRecommendation } from "../../types/types";
+import { IActing } from "../../types/types";
+
+
+interface DepartmentCounts {
+  [key: string]: number;
+}
 
 const Acting = ({ creditsData }: { creditsData: IActing }) => {
   const [data, setData] = useState<IActing[]>(creditsData?.cast);
   const[isShowDropDown,setIsShowDropdown] = useState(false)
+  const[isShowDropDownType,setIsShowDropDownType] = useState(false)
   const actingLength = creditsData?.cast?.length;
-  const productionLength = creditsData?.crew?.filter(
-    (item) => item?.department === "Production"
-  ).length;
-  const writingLength = creditsData?.crew?.filter(
-    (item) => item?.department === "Writing"
-  ).length;
+const[filterType,setFilterType] = useState('All')
 
-  const creatorLength = creditsData?.crew?.filter(
-    (item) => item?.department === "Creator"
-  ).length;
-
+  const[activeFilter,setActiveFilter] = useState('Department')
   const tvLength = creditsData?.cast?.filter(item => item.media_type === 'tv').length;
   const movieLength = creditsData?.cast?.filter(item => item.media_type === 'movie').length;
 
@@ -24,34 +22,57 @@ const Acting = ({ creditsData }: { creditsData: IActing }) => {
     setData(creditsData?.cast);
   }, [creditsData]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    if ((e.target as HTMLSelectElement).value === "Acting") {
+ 
+  
+  const departmentCounts:DepartmentCounts = {};
+  
+  creditsData?.crew?.forEach(item => {
+    const department = item.department;
+    if (departmentCounts.hasOwnProperty(department)) {
+      departmentCounts[department] += 1;
+    } else {
+      departmentCounts[department] = 1;
+    }
+  });
+
+
+  const handleChange = (filterQuery:string) => {
+    setActiveFilter(filterQuery)
+    if (filterQuery=== "Acting") {
       setData(creditsData?.cast);
     } else {
       setData(
-        creditsData?.crew?.filter((item) => item.department === e.target.value)
+        creditsData?.crew?.filter((item) => item.department === filterQuery)
       );
     }
+    setIsShowDropdown(false)
   };
- const handleFilterType = (e:React.ChangeEvent<HTMLSelectElement>) =>{
-  
+ const handleFilterType = (filterType:string) =>{
+  setFilterType(filterType)
     setData(
-      creditsData?.cast?.filter((item) => item.media_type === e.target.value)
+      creditsData?.cast?.filter((item) => item.media_type === filterType)
     );
+    setIsShowDropDownType(false);
   
  }
+ const sortedData = data?.sort((a: any, b: any) => {
+  const aDate = a?.media_type === "tv" ? a?.first_air_date : a?.release_date;
+  const bDate = b?.media_type === "tv" ? b?.first_air_date : b?.release_date;
+  return parseInt(bDate) - parseInt(aDate);
+});
+ 
   return (
     <section className="my-10">
       <div className="flex items-start justify-between">
         <div className="flex-1">
           <h3 className="text-2xl mb-6">Acting</h3>
           <div className="bg-[#161D2F] rounded-md p-3">
-            {data?.map((item: any) => (
+            {sortedData?.map((item: any) => (
               <Link to={`/movie/${item.id}`} className="flex items-center mb-3 py-2 gap-7 border-b-[1px]">
                 <span>
                   {item?.media_type === "tv"
-                    ? parseInt(item?.first_air_date)
-                    : parseInt(item?.release_date)}
+                    ? parseInt(item?.first_air_date) || "—"
+                    : parseInt(item?.release_date) || "-"}
                 </span>
                 <p className="text-md font-bold">
                   {" "}
@@ -69,25 +90,25 @@ const Acting = ({ creditsData }: { creditsData: IActing }) => {
         </div>
         <div className="flex gap-2">
 
-          <select onChange={(e) => handleFilterType(e)}>
-            <option value="movie">Movie {movieLength} </option>
-            <option value="tv">TV {tvLength}</option>
-          </select>
-          <div className="relative cursor-pointer">
-            <p onClick={() =>setIsShowDropdown(!isShowDropDown)} className="relative ">Department</p>
-          <ul className={`bg-red-600  absolute ${isShowDropDown ? 'block' : "hidden"}`}>
-            <li>Acting</li>
-            <li>Production</li>
-            <li>Writing</li>
-            <li>Creator</li>
+        <div className="relative cursor-pointer w-40">
+            <p  className="relative capitalizes " onClick={() => setIsShowDropDownType(!isShowDropDownType)}>{filterType}</p>
+          <ul className={`bg-white w-full mt-1 text-[#000] rounded-md p-4 absolute ${isShowDropDownType ? 'block' : "hidden"}`}>
+           <li onClick={() => handleFilterType('movie')}>Movie</li>
+           <li onClick={() => handleFilterType('tv')}>Tv</li>
           </ul>
           </div>
-          {/* <select placeholder="Department" onChange={(e) => handleChange(e)}>
-            <option value="Acting">Acting {actingLength}</option>
-            <option value="Production">Production {productionLength}</option>
-            <option value="Writing">Writing {writingLength}</option>
-            <option value="Creator">Creator {creatorLength}</option>
-          </select> */}
+          <div className="relative cursor-pointer w-40">
+            <p onClick={() =>setIsShowDropdown(!isShowDropDown)} className="relative ">{activeFilter}</p>
+          <ul className={`bg-white w-full mt-1 text-[#000] rounded-md p-4 absolute ${isShowDropDown ? 'block' : "hidden"}`}>
+            <li   onClick={() => handleChange('Acting')}>Acting {actingLength}</li>
+           {Object.entries(departmentCounts)?.map(([department,count]) =>(
+            <li className="my-1" onClick={() =>{
+              handleChange(department)
+            }}>{department} {count}</li>
+           ))}
+          </ul>
+          </div>
+          
         </div>
       </div>
     </section>

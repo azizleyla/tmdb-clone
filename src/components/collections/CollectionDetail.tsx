@@ -141,10 +141,7 @@ const CollectionDetail = () => {
             </div>
             <div className="flex items-center gap-2">
               <div className="my-6 w-16 h-16">
-                <CircularProgressbar
-                    value={
-                     30
-                    }
+              <CircularProgressbar
                   styles={buildStyles({
                     // Rotation of path and trail, in number of turns (0-1)
 
@@ -153,7 +150,13 @@ const CollectionDetail = () => {
 
                     // Text size
                     textSize: "27px",
-                   
+                    pathColor: `rgba(38, 194, 129, ${
+                      movieItem?.vote_average !== undefined
+                        ? movieItem.vote_average
+                          ? movieItem?.vote_average * 10
+                          : ""
+                        : 0
+                    })`,
                     // How long animation takes to go from one percentage to another, in seconds
 
                     // Can specify path transition in more detail, or remove it entirely
@@ -164,13 +167,20 @@ const CollectionDetail = () => {
                     trailColor: "#333",
                     backgroundColor: "#21d07a",
                   })}
-                 
-                
+                  value={
+                    movieItem?.vote_average
+                      ? movieItem?.vote_average * 10
+                      : 0
+                  }
+                  text={`${Math.trunc(
+                    movieItem?.vote_average
+                      ? movieItem?.vote_average * 10
+                      : 0,
+                  )}%`}
                 />
               </div>
               <span className="text-white">User score</span>
             </div>
-
             <div className="flex text-white text-sm gap-[20px]">
               <span className="text-white">
                
@@ -219,8 +229,8 @@ const CollectionDetail = () => {
               <li className="hover:bg-[#00B4E4] text-[#333] hover:text-white  relative flex justify-between group w-full mb-2">Rating
               <AiFillCaretRight/>
 
-              <ul className="hover:bg-[#00B4E4]  rounded-m border-[1px] rounded-md border-[#333]  absolute py-2  px-3 group-hover:block left-[140px] top-0 hidden bg-white w-full ">
-                  <li className="hover:bg-[#00B4E4] text-[#333  hover:text-white flex justify-between" onClick={() =>handleChange('rating-asc')}>Ascending
+              <ul className="  rounded-m border-[1px] rounded-md border-[#333]  absolute py-2  px-3 group-hover:block left-[140px] top-0 hidden bg-white w-full ">
+                  <li className="hover:bg-[#00B4E4] text-[#333]  hover:text-white flex justify-between" onClick={() =>handleChange('rating-asc')}>Ascending
                   </li>
                   <li  className="hover:bg-[#00B4E4] text-[#333]  hover:text-white  flex justify-between"  onClick={() =>handleChange('rating-desc')}>Descending
                   </li>
