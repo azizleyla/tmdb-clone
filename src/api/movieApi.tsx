@@ -63,5 +63,18 @@ export const MovieApi = {
       `/person/${id}/combined_credits?api_key=4faf715e4beccd69d65cf8aa0f91cc5a`,
     );
     return response.data;
+  },
+  async getPostesByMovieId(id:string){
+    const response = await baseApi.get(
+      `/movie/${id}/images?api_key=4faf715e4beccd69d65cf8aa0f91cc5a`,
+    );
+    return response.data;
+  },
+  async getVideosByMovieId(id:string){
+    const response = await baseApi.get(
+      `/movie/${id}/videos?api_key=4faf715e4beccd69d65cf8aa0f91cc5a`,
+    );
+    return response.data;
   }
+  
 };

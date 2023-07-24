@@ -19,9 +19,11 @@ const Recommendations = () => {
     navigate(`/movie/${movieId}`,{replace:true})
   }
   return (
-    <>
-    <h1 className="text-white text-2xl">Recommendations</h1>
-    <div className="mt-10 flex gap-4 overflow-x-scroll overflow-y-hiddens">
+    
+    <section className="py-10">
+      {recommendations?.length > 0 &&  <>
+     <h1 className="text-white text-2xl">Recommendations</h1>
+    <div className="mt-10 flex gap-4 overflow-x-scroll overflow-y-hidden">
       {recommendations?.map((recommendation:IRecommendation) => (
         <div onClick={() => handleNavigate(recommendation.id)} className="group min-w-[250px] w-[250px] cursor-pointer">
           <div className="relative">
@@ -42,8 +44,11 @@ const Recommendations = () => {
           </div>
         </div>
       ))}
-    </div>
-    </>
+    </div> 
+    </> 
+    }
+  
+    </section>
   );
 };
 

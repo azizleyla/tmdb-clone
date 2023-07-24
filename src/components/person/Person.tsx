@@ -26,7 +26,7 @@ const Person = () => {
         queryFn: ({ queryKey }: any) => MovieApi.getCreditsCountByPersonId(queryKey[1]),
       });
       const knowForMovies = creditsData?.cast?.filter((item: { media_type: string }) => item.media_type === 'movie');
-console.log(knowForMovies)
+
     
       const calculateAge = () =>{
         const currentYear = new Date().getFullYear();

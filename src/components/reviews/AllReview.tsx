@@ -21,18 +21,15 @@ const AllReview = () => {
     queryFn: ({ queryKey }) =>
       MovieApi.getMovieById(queryKey[1] as string),
   });
-  const handleNavigate = () =>{
-    navigate(`/movie/${id}`, { replace: true });
-  }
 
    const results = reviewsData?.results;
 
 
   return (
     <>
-    <MovieHeader movieItem={movieItem} handleNavigate={handleNavigate} />
+    <MovieHeader movieItem={movieItem} />
     <div className='flex gap-7 flex-col container m-auto my-10'>
-        {results.map((result:IReview) =>(
+        {results?.map((result:IReview) =>(
            <ReviewItem result={result}/>
         ))}
       

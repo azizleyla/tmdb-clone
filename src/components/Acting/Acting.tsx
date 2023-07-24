@@ -45,7 +45,8 @@ const[filterType,setFilterType] = useState('All')
         creditsData?.crew?.filter((item) => item.department === filterQuery)
       );
     }
-    setIsShowDropdown(false)
+
+    setIsShowDropDownType(false)
   };
  const handleFilterType = (filterType:string) =>{
   setFilterType(filterType)
@@ -53,6 +54,7 @@ const[filterType,setFilterType] = useState('All')
       creditsData?.cast?.filter((item) => item.media_type === filterType)
     );
     setIsShowDropDownType(false);
+    setIsShowDropdown(false)
   
  }
  const sortedData = data?.sort((a: any, b: any) => {
@@ -93,8 +95,8 @@ const[filterType,setFilterType] = useState('All')
         <div className="relative cursor-pointer w-40">
             <p  className="relative capitalizes " onClick={() => setIsShowDropDownType(!isShowDropDownType)}>{filterType}</p>
           <ul className={`bg-white w-full mt-1 text-[#000] rounded-md p-4 absolute ${isShowDropDownType ? 'block' : "hidden"}`}>
-           <li onClick={() => handleFilterType('movie')}>Movie</li>
-           <li onClick={() => handleFilterType('tv')}>Tv</li>
+           <li onClick={() => handleFilterType('movie')}>Movie {movieLength}</li>
+           <li onClick={() => handleFilterType('tv')}>Tv {tvLength}</li>
           </ul>
           </div>
           <div className="relative cursor-pointer w-40">
